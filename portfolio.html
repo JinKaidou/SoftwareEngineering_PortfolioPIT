@@ -6,9 +6,9 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <!-- Rest of the head content remains the same -->
+    
     <script type="text/javascript">
-        // Previous JavaScript remains the same until the projects array
+        // javascript stuff
         window.tailwind.config = {
             darkMode: ['class'],
             theme: {
@@ -51,6 +51,7 @@
                 }
             }
         }
+        
 
         // Initialize GSAP ScrollTrigger
         gsap.registerPlugin(ScrollTrigger);
@@ -199,6 +200,49 @@
                 });
             }
         }
+    document.addEventListener('DOMContentLoaded', () => {
+    const contactLink = document.getElementById('contact-link');
+    const contactOverlay = document.getElementById('contact-overlay');
+    const closeContact = document.getElementById('close-contact');
+    const contactForm = document.getElementById('contactForm');
+    const successMessage = document.getElementById('successMessage');
+
+    // Open contact overlay
+    contactLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        contactOverlay.style.display = 'block';
+    });
+
+    // Close contact overlay
+    closeContact.addEventListener('click', () => {
+        contactOverlay.style.display = 'none';
+    });
+
+    // Close overlay when clicking outside
+    contactOverlay.addEventListener('click', (e) => {
+        if (e.target === contactOverlay) {
+            contactOverlay.style.display = 'none';
+        }
+    });
+
+    // Handle form submission
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Show success message
+        successMessage.style.display = 'block';
+        
+        // Reset form
+        this.reset();
+        
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+            successMessage.style.display = 'none';
+            contactOverlay.style.display = 'none';
+        }, 3000);
+    });
+});
+
 
         document.addEventListener('DOMContentLoaded', () => {
             const projectWidgets = new ProjectWidget();
@@ -247,7 +291,6 @@
           --border: 0 0% 100%;
           --radius: 0.5rem;
       }
-      
       .worked-on-item {
           background-color: #787878;
           color: white;
@@ -260,15 +303,52 @@
           height: 30px;
       }
   </style>
+  <style>
+    .contact-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        overflow-y: auto;
+    }
+    
+    .success-message {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        display: none;
+        animation: slideIn 0.5s ease-out;
+        z-index: 2000;
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    </style>
 </head>
 <body>
   <div class="bg-[#2d2c31] text-white min-h-screen flex flex-col items-center">
-      <nav class="w-full p-4 flex justify-between">
-          <ul class="flex space-x-4">
-              <li><a href="#" class="text-white/80 hover:text-white">Home</a></li>
-              <li><a href="#" class="text-white/80 hover:text-white">Recent Work</a></li>
-              <li><a href="#" class="text-white/80 hover:text-white">Get In Touch</a></li>
-          </ul>
+    <nav class="w-full p-4 flex justify-between">
+        <ul class="flex space-x-4">
+            <li><a href="#" class="text-white/80 hover:text-white">Home</a></li>
+            <li><a href="#" class="text-white/80 hover:text-white">Recent Work</a></li>
+            <li><a href="#" class="text-white/80 hover:text-white" id="contact-link">Get In Touch</a></li>
+        </ul>
           <div class="flex items-center space-x-6">
               <!-- Facebook Icon -->
               <a href="https://www.facebook.com/jincaleb.bicar/" class="text-white/80 hover:text-white">
@@ -321,7 +401,94 @@
             <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Projects will be dynamically inserted here -->
             </div>
+    
         </section>
+    </div>
+    <div id="contact-overlay" class="contact-overlay">
+        <div class="max-w-2xl mx-auto px-4 py-8">
+            <div class="flex justify-end mb-4">
+                <button id="close-contact" class="text-white/80 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <h1 class="text-3xl font-bold mb-8 text-center">Get In Touch</h1>
+            
+            <form id="contactForm" class="space-y-6">
+                <div>
+                    <label for="name" class="block text-sm font-medium mb-2">Name</label>
+                    <input type="text" id="name" name="name" required
+                        class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 focus:border-white focus:outline-none text-white">
+                </div>
+                
+                <div>
+                    <label for="email" class="block text-sm font-medium mb-2">Email</label>
+                    <input type="email" id="email" name="email" required
+                        class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 focus:border-white focus:outline-none text-white">
+                </div>
+                
+                <div>
+                    <label for="message" class="block text-sm font-medium mb-2">Message</label>
+                    <textarea id="message" name="message" rows="6" required
+                        class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 focus:border-white focus:outline-none text-white"></textarea>
+                </div>
+                
+                <button type="submit"
+                    class="w-full bg-white text-[#2d2c31] hover:bg-white/80 py-2 px-4 rounded-lg transition-colors">
+                    Send Message
+                </button>
+            </form>
+        </div>
+    </div>
+// message acknowledgement overalay 
+    <div id="successMessage" class="success-message">
+        <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Message sent successfully!
+        </div>
+    </div>
+// contact overlay when clicking get in touch 
+    <div id="contact-overlay" class="contact-overlay">
+        <div class="max-w-2xl mx-auto px-4 py-8">
+            <div class="flex justify-end mb-4">
+                <button id="close-contact" class="text-white/80 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <h1 class="text-3xl font-bold mb-8 text-center">Get In Touch</h1>
+            
+            <form id="contactForm" class="space-y-6">
+                <div>
+                    <label for="name" class="block text-sm font-medium mb-2">Name</label>
+                    <input type="text" id="name" name="name" required
+                        class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 focus:border-white focus:outline-none text-white">
+                </div>
+                
+                <div>
+                    <label for="email" class="block text-sm font-medium mb-2">Email</label>
+                    <input type="email" id="email" name="email" required
+                        class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 focus:border-white focus:outline-none text-white">
+                </div>
+                
+                <div>
+                    <label for="message" class="block text-sm font-medium mb-2">Message</label>
+                    <textarea id="message" name="message" rows="6" required
+                        class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 focus:border-white focus:outline-none text-white"></textarea>
+                </div>
+                
+                <button type="submit"
+                    class="w-full bg-white text-[#2d2c31] hover:bg-white/80 py-2 px-4 rounded-lg transition-colors">
+                    Send Message
+                </button>
+            </form>
+        </div>
     </div>
 </body>
 </html>
